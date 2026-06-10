@@ -148,11 +148,14 @@ meets its storage requirements. A specific 2 MB payload written at the very
 beginning of the drive (logical block address 0) causes the console to skip the
 PCIe Gen4 speed check, allowing slower drives to be used.
 
-This tool writes that 2 MB payload (`gen3_enabler_bringus.img`, embedded into
-the binary) to offset 0 of the drive you choose, then reads it back to make
-sure every byte landed correctly. The image already contains everything the
-console expects, so there is no formatting step: the PS5 boots normally and
-the SSD shows up under Settings > Storage.
+That payload is simply the **first ~2 MB of a drive that the PS5 itself already
+formatted** (taken from a supported Gen4 drive). Copying it onto an
+otherwise-rejected Gen2/Gen3 drive makes the console accept that drive too.
+
+This tool writes the embedded payload (`gen3_enabler_bringus.img`) to offset 0
+of the drive you choose, then reads it back to make sure every byte landed
+correctly. When you boot the PS5 with the drive installed, it will recognize it
+under **Settings → Storage** (it may initialize/format the drive on first use).
 
 Low-level disk access is implemented per platform:
 
@@ -245,16 +248,26 @@ is untouched.
 
 ## Credits
 
-The technique and the `gen3_enabler_bringus.img` payload come from
-[Jon Bringus](https://www.youtube.com/@JonBringus), who discovered and
-demonstrated that writing this image to the start of an NVMe drive makes the
-PS5 skip its speed check:
+This trick was discovered and refined by the **PS5 Linux Discord** community.
+Credit belongs to them - all this project does is wrap their method in a safe,
+cross-platform flasher.
 
-- ["I'm about to save a lot of PS5 owners some money"](https://youtu.be/Uds315QBUnE)
+The story, as told in the video below:
 
-All credit for the discovery goes to him. This project is a cross-platform
-flasher that makes his method easy and safe to use, so nobody has to break out
-`dd` and risk targeting the wrong disk by hand.
+- **Windfox** — made the original discovery: restoring an M.2 backup image (from
+  the "Netflix-and-hack" jailbreak setup) onto a Gen2/Gen3 drive caused the PS5
+  to **bypass its drive-speed check**.
+- **HiPmp5** — did the experimentation that made it practical: shrinking the
+  required data from a full 256 GB dump down to ~94 MB and finally to just
+  **1.7 MB**, and showing that the first ~2 MB of *any* drive already formatted
+  by the PS5 (from a working Gen4 drive) is all you need.
+- [Jon Bringus / Bringus Studios](https://www.youtube.com/@JonBringus) —
+  documented and popularized the method, produced the `gen3_enabler_bringus.img`
+  dump that this tool embeds, and brought it to a wide audience:
+  ["I'm about to save a lot of PS5 owners some money"](https://youtu.be/Uds315QBUnE).
+
+This project exists so nobody has to break out `dd` by hand and risk targeting
+the wrong disk.
 
 ## License
 
