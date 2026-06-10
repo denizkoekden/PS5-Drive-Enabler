@@ -1,0 +1,18 @@
+[workspace]
+resolver = "2"
+members = ["core", "cli", "gui"]
+
+[workspace.package]
+version = "1.0.0"
+edition = "2021"
+license = "MIT"
+authors = ["PS5-Drive-Enabler contributors"]
+repository = "https://github.com/koekden/PS5-Drive-Enabler"
+
+# Small release binaries for end-user distribution.
+[profile.release]
+opt-level = "z"
+lto = true
+codegen-units = 1
+strip = true
+panic = "abort"

@@ -1,0 +1,16 @@
+[package]
+name = "ps5de-gui"
+description = "Click-and-go GUI to flash the PS5 Gen3 enabler image onto an NVMe drive."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[[bin]]
+name = "ps5-drive-enabler-gui"
+path = "src/main.rs"
+
+[dependencies]
+ps5de-core = { path = "../core" }
+eframe = "0.31"
